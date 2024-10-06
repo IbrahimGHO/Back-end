@@ -1,9 +1,10 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import pymysql
 import boto3 
 
 app = Flask(__name__)
-
+CORS(app)
 ssm = boto3.client('ssm')
 
 
@@ -12,12 +13,11 @@ def get_parameter(name, with_decryption=False):
     return response['Parameter']['Value']
 
 
-db_endpoint = get_parameter('DB_URL')        
+db_endpoint = get_parameter('DB_URL')       
 username = get_parameter('username')         
 password = get_parameter('db_password', with_decryption=True) 
 db_name = get_parameter('db_name')    
 
-print( password)
 # Connect to the MySQL database
 def get_db_connection():
     try:
