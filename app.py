@@ -5,7 +5,7 @@ import boto3
 
 app = Flask(__name__)
 CORS(app)
-ssm = boto3.client('ssm')
+ssm = boto3.client('ssm' ,region_name='us-east-1')
 
 
 def get_parameter(name, with_decryption=False):
