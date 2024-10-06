@@ -1,0 +1,38 @@
+#!/bin/bash
+# Update the system and install required packages
+yum update -y
+
+# Install Python 3 and development tools
+yum install -y python3 git
+
+# Ensure pip is installed
+python3 -m ensurepip --upgrade
+
+# Install virtualenv using pip
+pip3 install virtualenv
+
+# Clone the GitHub repository for the Flask backend
+cd /home/ec2-user
+
+# Check if the directory already exists before cloning
+if [ ! -d "Back-end" ]; then
+    git clone https://github.com/IbrahimGHO/Back-end.git
+else
+    echo "Back-end directory already exists. Skipping clone."
+fi
+
+# Navigate to the project directory
+cd Back-end
+
+# Create a virtual environment in a new directory
+python3 -m venv venv
+
+# Install dependencies from requirements.txt
+source venv/bin/activate
+pip install -r requirements.txt
+
+# Run the Flask application in the background using nohup
+nohup venv/bin/python app.py > nohup.out 2>&1 &
+
+# Optional: Print out logs for debugging (if needed)
+# tail -f nohup.out
